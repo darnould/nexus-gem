@@ -2,6 +2,7 @@ require 'rubygems/local_remote_options'
 require 'net/http'
 require 'base64'
 require 'nexus/config'
+require 'openssl'
 
 class Gem::AbstractCommand < Gem::Command
   include Gem::LocalRemoteOptions
@@ -127,6 +128,18 @@ class Gem::AbstractCommand < Gem::Command
       else
         raise ArgumentError
       end
+
+    if config.client_cert
+      http.cert = OpenSSL::X509::Certificate.new(File.read config.client_cert)
+    end
+
+    if config.client_key
+      http.key = OpenSSL::PKey::RSA.new(File.read config.client_key)
+    end
+
+    if config.ca_file
+      http.ca_file = config.ca_file
+    end
 
     request = request_method.new( url.path )
     request.add_field "User-Agent", "Ruby" unless RUBY_VERSION =~ /^1.9/

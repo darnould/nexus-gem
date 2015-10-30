@@ -60,6 +60,18 @@ module Nexus
       @cipher = Cipher.new( pass, config[ :token ] )
     end
 
+    def client_cert
+      @conf[ :client_cert ]
+    end
+
+    def client_key
+      @conf[ :client_key ]
+    end
+
+    def ca_file
+      @conf[ :ca_file ]
+    end
+
     def always_prompt?
       @conf[ :always_prompt ]
     end
